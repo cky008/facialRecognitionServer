@@ -1,0 +1,10 @@
+opencv-python
+Flask
+numpy
+python-socketio
+Flask-SocketIO
+eventlet
+waitress
+cmake
+dlib
+face_recognition
