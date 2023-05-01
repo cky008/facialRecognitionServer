@@ -49,3 +49,6 @@ python3 -m pip install --upgrade setuptools
 
 ## Detailed Documentation
 [Documentation](docs/Continuous%20Assessment%20Report.pdf)
+
+## Application Preview  
+![Demo](imgs/Demo.png)
