@@ -36,3 +36,16 @@ http://YourIP:8080/
 ## Demo
 [Youtube]()
 
+## Environment
+macOS Ventura 13.3.1  
+Python 3.9.16  
+
+## Little Tips
+I encountered some errors when configuring my environment, and you may encounter these problems as well. You may be able to try to resolve the problem by using these commands
+```shell
+pip3 install --upgrade pip
+python3 -m pip install --upgrade setuptools
+```
+
+## Detailed Documentation
+[Documentation](docs/Continuous%20Assessment%20Report.pdf)

@@ -21,7 +21,7 @@ face_names=[]
 # Get all the images in the faces folder
 image_files = [f for f in os.listdir(face_images_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
-# Look at the path and append the images and names to the arrays
+# Define some constants
 SCALE_FACTOR = 0.25
 UNKNOWN_THRESHOLD = 0.6
 
@@ -41,23 +41,20 @@ for cl in image_files:
     # Get name only
     face_names.append(os.path.splitext(cl)[0])
 
-# Function that returns a array of encodings for each image.
+# Function that convert the face distance calculated during face recognition process (i.e., face_distance) into a confidence score
 def face_distance_to_conf(face_distance, face_match_threshold=0.6):
-    # Returns a value from 0.0 to 1.0 representing how similar the faces are.
+    # Below is a simple linear function that converts the distance to a confidence score
     if face_distance > face_match_threshold:
         range = (1.0 - face_match_threshold)
         linear_val = (1.0 - face_distance) / (range * 2.0)
         return linear_val
-    # Give more weight to distances further from the threshold
+    # Otherwise we linearly interpolate the confidence to a more logarithmic scale
     else:
-        # Invert and scale the distance to fall between 0.0 and 1.0
         range = face_match_threshold
-        # print(face_distance)
         linear_val = 1.0 - (face_distance / (range * 2.0))
-        # print(linear_val)
         return linear_val + ((1.0 - linear_val) * ((linear_val - 0.5) * 2) ** 0.2)
 
-# Function that returns a array of encodings for each image.
+# Function that computes the face encodings for these known images.
 def find_face_encodings(images):
     face_encodings_list =[]
     for img in images:
@@ -70,7 +67,7 @@ def find_face_encodings(images):
     # Return the array of face encodings    
     return face_encodings_list
 
-# Get the face encodings for each face in each image file
+# Detecting faces in a video frame and comparing them with known face encodings
 def process_frame(img):
     # Skip if image is empty
     if img is None or img.size == 0:
@@ -79,9 +76,7 @@ def process_frame(img):
     resized_frame = cv2.resize(img, (0, 0), None, SCALE_FACTOR, SCALE_FACTOR)
     # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
     resized_frame = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)
-    # Get the face encodings for each face in each image file
     current_frame_faces = face_recognition.face_locations(resized_frame)
-    # Get the face encodings for each face in each image file
     current_frame_encodings = face_recognition.face_encodings(resized_frame, current_frame_faces)
 
     # Loop over each face found in the frame to see if it's someone we know.
